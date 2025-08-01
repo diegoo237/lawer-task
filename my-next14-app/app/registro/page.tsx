@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function Registro() {
   const router = useRouter();
-  const [usuario, setUsuario] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -15,7 +15,7 @@ export default function Registro() {
 
     const data = {
       email,
-      usuario,
+      name,
       senha,
     };
 
@@ -39,20 +39,20 @@ export default function Registro() {
             onSubmit={handleSubmit}
           >
             <input
-              onChange={(e) => setUsuario(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
+              onChange={(e) => setName(e.target.value)}
+              className="border-1 border-gray-200  focus:black rounded-2xl p-3"
               type="text"
               placeholder="Usuario"
             />
             <input
               onChange={(e) => setEmail(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
+              className="border-1 border-gray-200  focus:black rounded-2xl p-3"
               type="email"
               placeholder="Email"
             />
             <input
               onChange={(e) => setSenha(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
+              className="border-1 border-gray-200  focus:black rounded-2xl p-3"
               type="password"
               placeholder="Senha"
             />

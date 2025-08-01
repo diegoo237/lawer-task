@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiRequest } from "../lib/api";
+import { apiRequest } from "../../lib/api";
 
 import Link from "next/link";
 
@@ -26,9 +26,12 @@ export default function Login() {
 
     if (response.error) {
       return;
+      alert("Falha no login");
     }
 
-    localStorage.setItem("token", response.data!.access_token);
+    const token = response.data!.access_token;
+
+    document.cookie = `jwtToken=${token}; path=/; max-age=3600; secure; samesite=lax`;
     alert("Login bem-sucedido!");
     router.push("/dashboard");
   };

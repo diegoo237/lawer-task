@@ -55,7 +55,7 @@ export default function Login() {
             <input
               onChange={(e) => setSenha(e.target.value)}
               className="border-1 border-gray-200  focus:outline-black rounded-2xl p-3"
-              type="text"
+              type="password"
               placeholder="Senha"
             />
             <button

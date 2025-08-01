@@ -8,6 +8,7 @@ import {
   ApiProperty,
 } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength } from 'class-validator';
+import { Public } from './public.decorator';
 
 export class LoginDto {
   @ApiProperty({
@@ -31,6 +32,7 @@ export class LoginDto {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Faz login e retorna um token JWT' })

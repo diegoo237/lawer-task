@@ -15,4 +15,11 @@ export class CreateClienteDto {
   })
   @IsString({ message: 'name precisa ser uma string' })
   name: string;
+
+  @ApiProperty({
+    description: 'Senha do cliente',
+    example: 'senha123',
+  })
+  @IsString({ message: 'A senha deve ser uma string' })
+  senha: string;
 }

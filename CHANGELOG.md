@@ -13,3 +13,5 @@
 ### lawertask-api
 
 - Logica de login com jwt finalizada
+- Implementado proteçao de rotas no backend
+- Estrutura inicial do projeto next14 realizada

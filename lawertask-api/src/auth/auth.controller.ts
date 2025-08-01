@@ -8,6 +8,7 @@ import {
   ApiProperty,
 } from '@nestjs/swagger';
 import { IsEmail, IsString, MinLength } from 'class-validator';
+import { Public } from './public.decorator';
 
 export class LoginDto {
   @ApiProperty({
@@ -22,7 +23,6 @@ export class LoginDto {
     example: 'senha123',
   })
   @IsString({ message: 'A senha deve ser uma string' })
-  @MinLength(6, { message: 'A senha deve ter pelo menos 6 caracteres' })
   senha: string;
 }
 
@@ -31,6 +31,7 @@ export class LoginDto {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Faz login e retorna um token JWT' })

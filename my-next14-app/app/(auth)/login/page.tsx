@@ -27,6 +27,7 @@ export default function Login() {
     if (response.error) {
       return;
       alert("Falha no login");
+      alert("Falha no login");
     }
 
     const token = response.data!.access_token;

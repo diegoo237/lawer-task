@@ -11,7 +11,6 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Task as TaskModel, Cliente as ClienteModel } from 'generated/prisma';
 import {
   ApiOperation,
@@ -20,6 +19,8 @@ import {
   ApiBody,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Public } from './auth/public.decorator';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 import { CreateClienteDto } from './cliente/create-cliente.dto';
 import { CreateTaskDto } from './task/create-task.dto';
@@ -31,7 +32,7 @@ import { TaskService } from './task/task.service';
 import { AuthService } from './auth/auth.service';
 
 @Controller('api')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class AppController {
   constructor(
@@ -135,6 +136,7 @@ export class AppController {
   }
 
   // CLIENTES
+  @Public()
   @Post('cliente')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Cria um novo cliente' })

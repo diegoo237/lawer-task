@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function Registro() {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -15,6 +16,7 @@ export default function Registro() {
 
     const data = {
       email,
+      name,
       name,
       senha,
     };

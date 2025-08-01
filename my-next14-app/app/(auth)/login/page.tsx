@@ -1,12 +1,12 @@
 "use client";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { apiRequest } from "../lib/api";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { apiRequest } from "../../lib/api";
 
-export default function Registro() {
+import Link from "next/link";
+
+export default function Login() {
   const router = useRouter();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
@@ -15,61 +15,63 @@ export default function Registro() {
 
     const data = {
       email,
-      name,
       senha,
     };
 
-    const response = await apiRequest("/cliente", "POST", data);
+    const response = await apiRequest<{ access_token: string }>(
+      "/auth/login",
+      "POST",
+      data
+    );
 
     if (response.error) {
       return;
+      alert("Falha no login");
+      alert("Falha no login");
     }
 
-    alert("Registro bem-sucedido! Faça login para continuar.");
-    router.push("/login");
+    const token = response.data!.access_token;
+
+    document.cookie = `jwtToken=${token}; path=/; max-age=3600; secure; samesite=lax`;
+    alert("Login bem-sucedido!");
+    router.push("/dashboard");
   };
 
   return (
     <div className="font-sans flex items-center justify-center min-h-screen">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <section className="flex flex-col items-center ">
-          <h1 className=" text-3xl mb-7">Seja bem Vindo</h1>
+        <section className="flex flex-col items-center">
+          <h1 className=" text-3xl">Bem Vindo de volta</h1>
+
           <form
             className=" flex flex-col gap-2 p-6  w-80"
             onSubmit={handleSubmit}
           >
             <input
-              onChange={(e) => setName(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
-              type="text"
-              placeholder="Usuario"
-            />
-            <input
               onChange={(e) => setEmail(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
+              className="border-1 border-gray-200  focus:outline-black rounded-2xl p-3"
               type="email"
               placeholder="Email"
             />
             <input
               onChange={(e) => setSenha(e.target.value)}
-              className="border-1 border-gray-200  focus:outline-yellow-500 rounded-2xl p-3"
+              className="border-1 border-gray-200  focus:outline-black rounded-2xl p-3"
               type="password"
               placeholder="Senha"
             />
-
             <button
               type="submit"
               className=" bg-black p-3 rounded-2xl hover:cursor-pointer text-gray-50 font-bold"
             >
-              Registrar-se
+              Login
             </button>
-            <h2 className="self-center">
-              <span>Quer fazer login? </span>
+            <h2>
+              <span>Nao possui conta ainda? </span>
               <Link
-                href="/login"
+                href="/registro"
                 className="text-blue-600 hover:cursor-pointer"
               >
-                Logar
+                registrar-se
               </Link>
             </h2>
           </form>

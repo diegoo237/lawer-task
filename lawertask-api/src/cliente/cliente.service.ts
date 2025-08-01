@@ -40,6 +40,17 @@ export class ClienteService {
     return cliente;
   }
 
+  async findByEmail(email: string): Promise<Cliente | null> {
+    this.logger.log(`Buscando cliente com email: ${email}`);
+    const cliente = await this.prisma.cliente.findFirst({
+      where: { email, deletedAt: null, ativo: true },
+    });
+    this.logger.log(
+      `Cliente com email ${email} ${cliente ? 'encontrado' : 'não encontrado'}`,
+    );
+    return cliente;
+  }
+
   async update(id: string, data: Prisma.ClienteUpdateInput): Promise<Cliente> {
     this.logger.log(
       `Atualizando cliente com ID: ${id}, dados: ${JSON.stringify(data)}`,

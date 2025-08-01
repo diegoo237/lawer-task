@@ -9,28 +9,35 @@ import {
   NotFoundException,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
-import { ClienteService } from './cliente/cliente.service';
-import { TaskService } from './task/task.service';
+import { AuthGuard } from '@nestjs/passport';
 import { Task as TaskModel, Cliente as ClienteModel } from 'generated/prisma';
-import { CreateClienteDto } from './cliente/create-cliente.dto';
-import { CreateTaskDto } from './task/create-task.dto';
-import { UpdateClienteDto } from './cliente/update-cliente.dto';
-import { UpdateTaskDto } from './task/update-task.dto';
 import {
-  ApiTags,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiBody,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 
-@ApiTags('clientes')
+import { CreateClienteDto } from './cliente/create-cliente.dto';
+import { CreateTaskDto } from './task/create-task.dto';
+import { UpdateClienteDto } from './cliente/update-cliente.dto';
+import { UpdateTaskDto } from './task/update-task.dto';
+
+import { ClienteService } from './cliente/cliente.service';
+import { TaskService } from './task/task.service';
+import { AuthService } from './auth/auth.service';
+
 @Controller('api')
+@UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class AppController {
   constructor(
     private readonly clienteService: ClienteService,
     private readonly taskService: TaskService,
+    private readonly authService: AuthService,
   ) {}
 
   // TASKS
@@ -42,6 +49,7 @@ export class AppController {
     description: 'Tarefa criada com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   @ApiBody({ type: CreateTaskDto })
   async createTask(@Body() postData: CreateTaskDto): Promise<TaskModel> {
     const { title, description, status, priority, dueDate, id } = postData;
@@ -63,6 +71,7 @@ export class AppController {
     status: 200,
     description: 'Lista de tarefas',
   })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async getTask(): Promise<TaskModel[]> {
     return this.taskService.findAll();
   }
@@ -79,6 +88,7 @@ export class AppController {
     description: 'Tarefa encontrada',
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async findOneTask(@Param('id') id: string): Promise<TaskModel> {
     const task = await this.taskService.findOne(id);
     if (!task) {
@@ -100,6 +110,7 @@ export class AppController {
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   @ApiBody({ type: UpdateTaskDto })
   async updateTask(
     @Param('id') id: string,
@@ -118,6 +129,7 @@ export class AppController {
   })
   @ApiResponse({ status: 204, description: 'Tarefa excluída com sucesso' })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async deleteTask(@Param('id') id: string): Promise<void> {
     await this.taskService.softDelete(id);
   }
@@ -131,14 +143,16 @@ export class AppController {
     description: 'Cliente criado com sucesso',
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   @ApiBody({ type: CreateClienteDto })
   async createCliente(
     @Body() postData: CreateClienteDto,
   ): Promise<ClienteModel> {
-    const { email, name } = postData;
+    const { email, name, senha } = postData;
     return this.clienteService.create({
       email,
       name,
+      senha: await this.authService.hashPassword(senha),
     });
   }
 
@@ -148,6 +162,7 @@ export class AppController {
     status: 200,
     description: 'Lista de clientes',
   })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async getCliente(): Promise<ClienteModel[]> {
     return this.clienteService.findAll();
   }
@@ -164,6 +179,7 @@ export class AppController {
     description: 'Cliente encontrado',
   })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async findOneCliente(@Param('id') id: string): Promise<ClienteModel> {
     const cliente = await this.clienteService.findOne(id);
     if (!cliente) {
@@ -187,6 +203,7 @@ export class AppController {
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   @ApiBody({ type: UpdateClienteDto })
   async updateCliente(
     @Param('id') id: string,
@@ -205,6 +222,7 @@ export class AppController {
   })
   @ApiResponse({ status: 204, description: 'Cliente excluído com sucesso' })
   @ApiResponse({ status: 404, description: 'Cliente não encontrado' })
+  @ApiResponse({ status: 401, description: 'Não autorizado' })
   async deleteCliente(@Param('id') id: string): Promise<void> {
     await this.clienteService.softDelete(id);
   }

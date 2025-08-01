@@ -26,9 +26,11 @@ export default function Login() {
 
     if (response.error) {
       return;
+      alert("Falha no login");
     }
+    const token = response.data!.access_token;
 
-    localStorage.setItem("token", response.data!.access_token);
+    document.cookie = `jwtToken=${token}; path=/; max-age=3600; secure; samesite=lax`;
     alert("Login bem-sucedido!");
     router.push("/dashboard");
   };

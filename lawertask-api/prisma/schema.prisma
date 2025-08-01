@@ -17,11 +17,12 @@ datasource db {
 model Cliente {
   id        String    @id @default(uuid())
   email     String    @unique
+  senha     String
   name      String
   tasks     Task[]
   deletedAt DateTime?
   createdAt DateTime  @default(now())
-  updatedAt DateTime?  @updatedAt
+  updatedAt DateTime? @updatedAt
   ativo     Boolean   @default(true)
 }
 
@@ -33,7 +34,7 @@ model Task {
   priority    String
   dueDate     DateTime
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  updatedAt   DateTime? @updatedAt
   deletedAt   DateTime?
   ativo       Boolean   @default(true)
   cliente     Cliente?  @relation(fields: [clientId], references: [id])

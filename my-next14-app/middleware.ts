@@ -5,19 +5,24 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get("jwtToken")?.value;
   const { pathname } = request.nextUrl;
 
+  const path =
+    pathname.endsWith("/") && pathname.length > 1
+      ? pathname.slice(0, -1)
+      : pathname;
+
   const publicPaths = ["/login", "/registro"];
 
-  if (publicPaths.includes(pathname)) {
-    if (token && (pathname === "/login" || pathname === "/signup")) {
+  if (publicPaths.includes(path)) {
+    if (token) {
       return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
   }
 
   if (!token) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(url);
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", path);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

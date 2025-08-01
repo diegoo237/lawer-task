@@ -7,6 +7,11 @@ import Link from "next/link";
 export default function Nav() {
   const pathname = usePathname();
 
+  const handleLogout = () => {
+    document.cookie = "jwtToken=; path=/; max-age=0";
+    window.location.href = "/login";
+  };
+
   return (
     <nav
       className="bg-neutral-800 text-white px-6"
@@ -27,7 +32,7 @@ export default function Nav() {
           </TabNav.Link>
         </TabNav.Root>
 
-        <button onClick={() => ""} className="cursor-pointer">
+        <button onClick={() => handleLogout()} className="cursor-pointer">
           <svg
             width="15"
             height="15"

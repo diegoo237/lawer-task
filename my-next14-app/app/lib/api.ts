@@ -1,4 +1,4 @@
-const url = "http://https://lawer-task.onrender.com//api";
+const url = "https://lawer-task.onrender.com/api";
 
 interface ApiResponse<T> {
   data?: T;

@@ -1,4 +1,4 @@
-import { IsString, IsDateString, IsOptional } from 'class-validator';
+import { IsString, IsDateString, IsOptional, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateTaskDto {
@@ -46,4 +46,13 @@ export class UpdateTaskDto {
   @IsDateString({}, { message: 'duedate deve ser uma data valida' })
   @IsOptional()
   dueDate?: string;
+
+  @ApiProperty({
+    description: 'ID do cliente associado à tarefa (opcional)',
+    example: 'a3f8b6c7-42d6-4b7d-b9f7-125a2e36d101',
+    required: false,
+  })
+  @IsUUID('4', { message: 'clientId deve ser um UUID válido' })
+  @IsOptional()
+  clientId?: string;
 }

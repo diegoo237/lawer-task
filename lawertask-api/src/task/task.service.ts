@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Task, Prisma } from 'generated/prisma';
+import { UpdateTaskDto } from './update-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -37,20 +38,35 @@ export class TaskService {
     return task;
   }
 
-  async update(id: string, data: Prisma.TaskUpdateInput): Promise<Task> {
+  async update(id: string, data: UpdateTaskDto): Promise<Task> {
     this.logger.log(
       `Atualizando tarefa com ID: ${id}, dados: ${JSON.stringify(data)}`,
     );
+
     try {
       const task = await this.findOne(id);
+
       if (!task) {
         this.logger.warn(`Tarefa com ID ${id} não encontrada para atualização`);
         throw new NotFoundException(`Tarefa com ID ${id} não encontrada`);
       }
+
+      const { clientId, ...taskData } = data;
+
+      const updateData: Prisma.TaskUpdateInput = {
+        ...taskData,
+        ...(clientId && {
+          cliente: {
+            connect: { id: clientId },
+          },
+        }),
+      };
+
       const updatedTask = await this.prisma.task.update({
         where: { id },
-        data,
+        data: updateData,
       });
+
       this.logger.log(`Tarefa com ID ${id} atualizada com sucesso`);
       return updatedTask;
     } catch (error) {

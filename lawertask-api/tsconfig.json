@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "Commonjs",
     "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,

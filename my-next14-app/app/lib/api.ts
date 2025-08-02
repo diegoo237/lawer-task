@@ -8,7 +8,7 @@ interface ApiResponse<T> {
 export async function apiRequest<T>(
   endpoint: string,
   method: string = "GET",
-  body?: any,
+  body?: unknown,
   token?: string
 ): Promise<ApiResponse<T>> {
   try {

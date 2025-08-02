@@ -32,12 +32,7 @@ export default function TaskList() {
         return;
       }
 
-      const response = await apiRequest(
-        `/tasks/${taskId}`,
-        "DELETE",
-        null,
-        token
-      );
+      await apiRequest(`/tasks/${taskId}`, "DELETE", null, token);
 
       setTasks(tasks.filter((t) => t.id !== taskId));
       console.log("Tarefa deletada com sucesso!");

@@ -19,6 +19,7 @@ interface Task {
 }
 
 interface Client {
+  id: string;
   name: string;
   email: string;
   createdAt: string;
@@ -39,14 +40,6 @@ interface DashboardStats {
     [clientId: string]: number;
   };
 }
-
-const formatMillisecondsToHours = (ms: number): string => {
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-  return `${hours}h ${remainingMinutes}m`;
-};
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -123,7 +116,7 @@ export default function Dashboard() {
           acc[task.priority] = (acc[task.priority] || 0) + 1;
           return acc;
         },
-        { alta: 0, media: 0, baixa: 0 }
+        { alta: 0, média: 0, baixa: 0 }
       );
 
       // Contagem de tarefas com vencimento próximo (próximos 7 dias)

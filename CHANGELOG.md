@@ -18,5 +18,8 @@
 - Login implementado no front
 
 ## [1.0.0] - 2025-07-31
+
 - Todas as funcoes de Tasks no front implementadas
-- 
+- Pagina de clientes implementada
+- Dashboard implementado
+- Testes implementados
